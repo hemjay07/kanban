@@ -4,6 +4,8 @@ import React, { useState, forwardRef, useEffect } from "react";
 import styled from "styled-components";
 import cancel from "../assets//icon-cross.svg";
 import { useDispatch, useSelector } from "react-redux";
+import { selectSelectedBoard } from "../features/selectors";
+import { selectBoards } from "../features/boardSlice";
 
 // title
 const StyledTitleInput = styled.input`
@@ -116,13 +118,8 @@ const StyledSelect = styled.select`
 `;
 
 export const SelectorInput = forwardRef((props, ref) => {
-  const boards = useSelector((state) => state.boards);
-
-  let selectedBoard = useSelector((state) => state.selectedBoard);
-  if (selectedBoard == "") {
-    selectedBoard = boards[0].name;
-  }
-
+  const boards = useSelector(selectBoards);
+  const selectedBoard = selectSelectedBoard();
   // get all the available columns for this board
   const availableColumns = boards.filter(
     (board) => board.name == selectedBoard

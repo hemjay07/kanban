@@ -1,6 +1,4 @@
 import React, { useState, useRef } from "react";
-import { nanoid } from "nanoid";
-
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Modal from "./modal";
@@ -64,14 +62,13 @@ const Columns = styled.div`
 const Title = styled.div`
   // border: solid 2px red;
 `;
-export default function ({ setEditBoard, newBoard }) {
+export default function ({ setEditBoard }) {
   // React Hook Form
   const {
     register,
-    unregister,
     handleSubmit,
     formState: { errors },
-  } = useForm({ shouldUnregister: true });
+  } = useForm({ shouldUnregister: true, defaultValues: {} });
   // console.log(errors[1]);
   // the handleSubmit API from the useForm hook passes the data as arguement to the function it is called with
 
@@ -158,7 +155,7 @@ export default function ({ setEditBoard, newBoard }) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Modal visibilitySetter={setEditBoard} />
       <EditBoardContainer>
-        {newBoard ? <h3>Add New Board</h3> : <h3>Edit Board</h3>}
+        <h3>Add New Board</h3>
         <Title>
           <p>Board Name</p>
           <div style={{ position: "relative" }}>
@@ -177,11 +174,8 @@ export default function ({ setEditBoard, newBoard }) {
             + Add New Columns
           </button>
         </Columns>
-        {newBoard ? (
-          <SaveChangesButton type="submit">Create New Board</SaveChangesButton>
-        ) : (
-          <SaveChangesButton>Save Changes</SaveChangesButton>
-        )}
+
+        <SaveChangesButton type="submit">Create New Board</SaveChangesButton>
       </EditBoardContainer>
     </form>
   );

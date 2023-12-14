@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import boardIcon from "../assets/icon-board.svg";
-import EditBoard from "./editOrAddBoard";
+import EditBoard from "./addNewBoard";
 import { useSelector, useDispatch } from "react-redux";
 import { boardSelected } from "../features/selectedBoardSlice";
 export const BoardButton = styled.button`

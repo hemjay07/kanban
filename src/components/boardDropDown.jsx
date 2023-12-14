@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import verticalEllipsis from "../assets/icon-vertical-ellipsis.svg";
-import EditBoard from "./editOrAddBoard";
+import EditBoard from "./editBoard";
 import DeleteBoard from "./deleteBoard";
 
 export const EllipsisDropDown = styled.div`

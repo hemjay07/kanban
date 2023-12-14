@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = "";
 
 const selectedBoardSlice = createSlice({
@@ -12,6 +13,6 @@ const selectedBoardSlice = createSlice({
     },
   },
 });
-
+export const selectedBoard = (state) => state.selectedBoard;
 export const { boardSelected } = selectedBoardSlice.actions;
 export default selectedBoardSlice.reducer;

@@ -5,7 +5,7 @@ import showSidebar from "../assets/icon-show-sidebar.svg";
 import Column from "./column";
 import data from "../data.json";
 import { AddTaskButton } from "./navbar";
-import EditBoard from "./editOrAddBoard";
+import EditBoard from "./addNewBoard";
 import { SelectedBoard } from "../app/App";
 import { useDispatch, useSelector } from "react-redux";
 
