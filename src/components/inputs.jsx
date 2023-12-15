@@ -127,7 +127,9 @@ export const SelectorInput = forwardRef((props, ref) => {
   )[0];
 
   // get all the available columns for this board
-  const availableColumns = Object.keys(availableBoard.columns);
+  const availableColumns = availableBoard
+    ? Object.keys(availableBoard.columns)
+    : [];
   console.log(availableColumns, "availableColumns");
   const options = availableColumns;
 

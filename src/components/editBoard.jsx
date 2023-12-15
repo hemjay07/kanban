@@ -85,11 +85,11 @@ export default function ({ setEditBoard }) {
 
   // Redux toolkit
   const dispatch = useDispatch();
-
+  const currentBoard = selectSelectedBoard();
   function onSubmit(data) {
     console.log(data);
     console.log(errors);
-    dispatch(boardEdited(data));
+    dispatch(boardEdited({ data, currentBoard }));
   }
 
   function addNewColumn() {

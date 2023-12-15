@@ -10,6 +10,13 @@ const ColumnContainer = styled.div`
   width: 17rem;
   min-width: 17rem;
   //   border: solid 2px red;
+  padding: 1rem 0;
+
+  &.empty {
+    border: dashed 1px var(--text-color);
+    border-radius: 5px;
+    padding: 1rem;
+  }
 `;
 const Title = styled.div`
   color: var(--Medium-Grey, #828fa3);
@@ -26,9 +33,10 @@ export default function ({ columnData }) {
   }
   const taskColor = getRandomColor();
   const tasks = columnData.tasks;
+  const empty = tasks ? "" : "empty";
   const columnName = columnData.name;
   return (
-    <ColumnContainer>
+    <ColumnContainer className={empty}>
       <Title>
         <span
           style={{

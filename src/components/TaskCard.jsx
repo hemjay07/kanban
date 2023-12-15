@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import ViewTask from "./veiwTask";
-import EditTask from "./editOrAddTask";
+import EditTask from "./editTask";
 import DeleteBoardOrTask from "./deleteBoard";
 import DeleteTask from "./deleteTask";
 const TaskContainer = styled.div`
@@ -28,7 +28,7 @@ const TaskContainer = styled.div`
   }
 `;
 
-export default function ({ taskData, columnName }) {
+export default function ({ taskData }) {
   // console.log(taskData.subtasks);
   // when the viewTask is set to true, a <ViewTask> modal is displayed showing the details of the task (subtask and all)
   // setIsViewTask sets the state and its important we pass it so that the overlay can use it to undisplay the modal

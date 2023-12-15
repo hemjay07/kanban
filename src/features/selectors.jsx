@@ -7,7 +7,7 @@ export function selectSelectedBoard() {
   const boards = useSelector(selectBoards);
   let selectedBoard = useSelector((state) => state.selectedBoard);
   if (selectedBoard == "") {
-    selectedBoard = Object.values(boards)[0].name || "";
+    selectedBoard = Object.values(boards)[0]?.name || "";
   }
   return selectedBoard;
 }
@@ -19,7 +19,8 @@ export function selectColumns() {
     (board) => board.name == currentBoardName
   )[0];
 
-  const columns = Object.values(currentBoard.columns);
+  const columns = currentBoard ? Object.values(currentBoard.columns) : [];
+
   return columns;
 }
 

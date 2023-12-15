@@ -6,10 +6,11 @@ import lightLogo from "../assets/logo-dark.svg";
 import darkLogo from "../assets/logo-light.svg";
 import chevronDown from "../assets/icon-chevron-down.svg";
 import BoardDropDown from "./boardDropDown";
-import EditTask from "./editOrAddTask";
+import AddNewTask from "./addNewTask";
 import { SelectedBoard } from "../app/App";
 import data from "../data.json";
 import { useSelector } from "react-redux";
+import { selectSelectedBoard } from "../features/selectors";
 
 const Container = styled.div`
   // border: solid 2px red;
@@ -98,7 +99,8 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
   const seleced = useSelector((state) => state.selectedBoard);
   console.log(boards, seleced);
   const [addNewTask, setAddNewTask] = useState(false);
-  const { selectedBoard } = useContext(SelectedBoard);
+  const selectedBoard = selectSelectedBoard();
+
   // console.log("rendered navbar");
   return (
     <Container>
@@ -164,7 +166,7 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
           + Add New Task
         </AddTaskButton>
         {addNewTask && (
-          <EditTask newTask={"yes"} setEdit={setAddNewTask} selected={"none"} />
+          <AddNewTask setAddNewTask={setAddNewTask} selected={"none"} />
         )}
         {/* The editDropdown component is a component retuns an ellipsis which upon click will give a drop down of two option whether to edit the board/task or to delete it  */}
         <BoardDropDown />

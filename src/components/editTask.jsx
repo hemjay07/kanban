@@ -69,12 +69,12 @@ const Description = styled.div``;
 
 // The setEdit prop is used to display the modal, the newTask is used to indicate if this is a new task or you are trying to edit a task, the selected either "none" (for a new task which of course has no status yet) or the status (taskData.status) which is the column the task belongs in
 
-export default function ({ setEdit, newTask, selected }) {
+export default function ({ setEdit, selected }) {
   return (
     <>
       <Modal visibilitySetter={setEdit} />
       <EditTaskContainer>
-        {newTask ? <h3>Add New Task</h3> : <h3>Edit Task</h3>}
+        <h3>Edit Task</h3>
         <Title>
           <p>Title</p>
           <TitleInput />
@@ -92,12 +92,8 @@ export default function ({ setEdit, newTask, selected }) {
         <Status>
           <h3></h3>
           <SelectorInput selected={selected} />
-        </Status>{" "}
-        {newTask ? (
-          <SaveChangesButton>Create Task</SaveChangesButton>
-        ) : (
-          <SaveChangesButton>Save Changes</SaveChangesButton>
-        )}
+        </Status>
+        <SaveChangesButton>Save Changes</SaveChangesButton>
       </EditTaskContainer>
     </>
   );
