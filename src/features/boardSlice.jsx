@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   PlatformLaunch: {
     name: "Platform Launch",
-    columnNames: ["Todo", "Doing", "Done"],
     columns: {
       Todo: {
         name: "Todo",
@@ -344,17 +343,16 @@ const initialState = {
     },
   },
 };
-
 const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
     newBoardCreated: {
       reducer(state, action) {
-        state.push({
+        state[action.payload.modifiedBoardName] = {
           name: action.payload.boardName,
           columns: action.payload.modifiedColumns,
-        });
+        };
       },
       prepare(data) {
         const { boardName, ...columns } = data;
@@ -363,34 +361,39 @@ const boardSlice = createSlice({
             name: column,
           };
         });
+        const modifiedBoardName = boardName.replace(/\s+/g, "");
 
-        return { payload: { boardName, modifiedColumns } };
+        return { payload: { boardName, modifiedColumns, modifiedBoardName } };
       },
     },
     boardEdited: {
       reducer(state, action) {
-        const { boardName, modifiedColumns } = action.payload;
+        const { modifiedColumns, modifiedBoardName } = action.payload;
 
-        modifiedColumns.forEach((column) => {
-          if (!state[boar].columnNames.includes(column.name))
-            state.columnNames[j].push({});
+        const formalColumn = state[modifiedBoardName].columns;
+        const formalColumnsKeys = Object.keys(state[modifiedBoardName].columns);
+
+        let newColumn = {};
+        Object.entries(modifiedColumns).forEach(([key, value]) => {
+          if (formalColumnsKeys.includes(key)) {
+            newColumn[key] = formalColumn[key];
+          } else {
+            newColumn[key] = value;
+          }
         });
 
-        state.push({
-          name: action.payload.boardName,
-          columns: action.payload.modifiedColumns,
-        });
+        state[modifiedBoardName].columns = newColumn;
       },
       prepare(data) {
         const { boardName, ...columns } = data;
+        const modifiedBoardName = boardName.replace(/\s+/g, "");
 
-        const modifiedColumns = Object.values(columns).map((column) => {
-          return {
-            name: column,
-          };
+        let modifiedColumns = {};
+        Object.values(columns).forEach((column) => {
+          modifiedColumns[column] = { name: column };
         });
 
-        return { payload: { boardName, modifiedColumns } };
+        return { payload: { modifiedColumns, modifiedBoardName } };
       },
     },
   },
@@ -398,5 +401,5 @@ const boardSlice = createSlice({
 
 export const selectBoards = (state) => state.boards;
 
-export const { newBoardCreated } = boardSlice.actions;
+export const { newBoardCreated, boardEdited } = boardSlice.actions;
 export default boardSlice.reducer;

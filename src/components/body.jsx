@@ -8,6 +8,11 @@ import { AddTaskButton } from "./navbar";
 import EditBoard from "./addNewBoard";
 import { SelectedBoard } from "../app/App";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  boardsArray,
+  selectColumns,
+  selectSelectedBoard,
+} from "../features/selectors";
 
 const BodyContainer = styled.div`
   width: 100vw;
@@ -76,20 +81,8 @@ const AddNewColumnButton = AddTaskButton;
 export default function ({ isSidebar, setIsSidebar }) {
   // this state is for the edit board modal which is displayed when add new column is clicked
   const [editBoard, setEditBoard] = useState(false);
-  // const columns = data.boards[0].columns;
 
-  const boards = useSelector((state) => state.boards);
-
-  // get the selected board from the store, if there is no selected board, set the selected board the first board on the list of baords
-  let selectedBoard = useSelector((state) => state.selectedBoard);
-  if (selectedBoard == "") {
-    selectedBoard = boards[0].name;
-  }
-
-  // filter through the data and look for the board that is the selectedBoard (according to the selectesBoard context), display using the columns in the boared
-  const columns = boards.filter((board) => board.name == selectedBoard)[0]
-    ?.columns;
-  // console.log(columns, selectedBoard);
+  const columns = selectColumns();
 
   return (
     <BodyContainer>

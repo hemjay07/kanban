@@ -7,15 +7,22 @@ export function selectSelectedBoard() {
   const boards = useSelector(selectBoards);
   let selectedBoard = useSelector((state) => state.selectedBoard);
   if (selectedBoard == "") {
-    selectedBoard = boards[0].name;
+    selectedBoard = Object.values(boards)[0].name || "";
   }
   return selectedBoard;
 }
 
 export function selectColumns() {
-  const currentBoard = selectSelectedBoard();
+  const currentBoardName = selectSelectedBoard();
   const boards = useSelector(selectBoards);
-  const columns = boards.filter((board) => board.name == currentBoard)[0]
-    .columns;
+  const currentBoard = Object.values(boards).filter(
+    (board) => board.name == currentBoardName
+  )[0];
+
+  const columns = Object.values(currentBoard.columns);
   return columns;
+}
+
+export function boardsArray() {
+  return Object.values(useSelector(selectBoards));
 }

@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import Modal from "./modal";
 import { EdittableInput, TitleInput } from "./inputs";
 import { useDispatch, useSelector } from "react-redux";
-import { newBoardCreated } from "../features/boardSlice";
+import { boardEdited, newBoardCreated } from "../features/boardSlice";
 import { selectColumns, selectSelectedBoard } from "../features/selectors";
 const EditBoardContainer = styled.div`
   position: absolute;
@@ -89,7 +89,7 @@ export default function ({ setEditBoard }) {
   function onSubmit(data) {
     console.log(data);
     console.log(errors);
-    dispatch(newBoardCreated(data));
+    dispatch(boardEdited(data));
   }
 
   function addNewColumn() {

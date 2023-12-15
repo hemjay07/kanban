@@ -4,6 +4,7 @@ import boardIcon from "../assets/icon-board.svg";
 import EditBoard from "./addNewBoard";
 import { useSelector, useDispatch } from "react-redux";
 import { boardSelected } from "../features/selectedBoardSlice";
+import { boardsArray, selectSelectedBoard } from "../features/selectors";
 export const BoardButton = styled.button`
   display: flex;
   gap: 0.75rem;
@@ -48,13 +49,8 @@ export default function () {
   const [editBoard, setEditBoard] = useState(false);
   // const { selectedBoard, setSelectedBoard } = useContext(SelectedBoard);
   // get the board array from the store
-  const boards = useSelector((state) => state.boards);
-
-  // get the selected board from the store, if there is no selected board, set the selected board the first board on the list of baords
-  let selectedBoard = useSelector((state) => state.selectedBoard);
-  if (selectedBoard == "") {
-    selectedBoard = boards[0].name;
-  }
+  const boards = boardsArray();
+  const selectedBoard = selectSelectedBoard();
 
   // useDispatch from Redux toolkit to dispatch actions
   const dispatch = useDispatch();
