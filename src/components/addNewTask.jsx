@@ -10,6 +10,8 @@ import {
   TitleInput,
 } from "./inputs";
 import { useDispatch } from "react-redux";
+import { selectSelectedBoard } from "../features/selectors";
+import { newTaskCreated } from "../features/boardSlice";
 const EditTaskContainer = styled.div`
   position: absolute;
   left: 50%;
@@ -78,11 +80,11 @@ export default function ({ setAddNewTask, selected }) {
     formState: { errors },
   } = useForm({ shouldUnregister: true, defaultValues: {} });
 
-  const dispatch = useDispatch;
-
+  const dispatch = useDispatch();
+  const currentBoard = selectSelectedBoard();
   function onSubmit(data) {
-    console.log(data);
-    dispatch(newTaskCreated(data));
+    console.log(data, currentBoard);
+    dispatch(newTaskCreated({ data, currentBoard }));
   }
   const subtaskIdRef = useRef(1);
 
@@ -146,14 +148,14 @@ export default function ({ setAddNewTask, selected }) {
           {/* this div helps to contain the title error message inside the title */}
           <div style={{ position: "relative" }}>
             <TitleInput
-              {...register("Title", { required: "Can’t be empty" })}
+              {...register("title", { required: "Can’t be empty" })}
               error={errors["Title"]}
             />
           </div>
         </Title>
         <Description>
           <p>Description</p>
-          <DescriptionInput {...register("Description")} />
+          <DescriptionInput {...register("description")} />
         </Description>
         <Subtask>
           <p>Subtasks</p>

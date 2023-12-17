@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-import { initialBoardsState } from "./selectors";
-
+const initialState = {};
 const boardSlice = createSlice({
   name: "board",
-  initialState: initialBoardsState,
+  initialState,
   reducers: {
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     newBoardCreated: {
@@ -23,11 +22,10 @@ const boardSlice = createSlice({
       prepare(data) {
         const { boardName, ...columns } = data;
 
+        let modifiedColumns = {};
         // modify the column to this kind of data structure
-        const modifiedColumns = Object.values(columns).map((column) => {
-          return {
-            name: column,
-          };
+        Object.values(columns).forEach((column) => {
+          modifiedColumns[column] = { name: column };
         });
 
         // convert the name of the board to a single string since that is how its object will be named (this is different from what its name is IN the object itself)
@@ -107,8 +105,57 @@ const boardSlice = createSlice({
 
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     newTaskCreated: {
-      reducer(state, action) {},
-      prepare(data) {},
+      reducer(state, action) {
+        const {
+          title,
+          description,
+          subtasksArray,
+          status,
+          taskId,
+          currentBoard,
+        } = action.payload;
+        // {
+        //   boards: {
+        //     Writing: {
+        //       name: 'Writing',
+        //       columns: {
+        //         wewe: {
+        //           name: 'wewe'
+        //         }
+        //       }
+        //     }
+        //   },
+        //   selectedBoard: ''
+        // }
+        state.writing.columns[status].tasks = {
+          title,
+          description,
+          taskId,
+          subtasksArray,
+        };
+      },
+
+      prepare(data) {
+        const { title, description, status, ...subtasks } = data.data;
+        const taskId = nanoid();
+        const currentBoardName = data.currentBoard.replace(/\s+/g, "");
+
+        let subtasksArray = [];
+        Object.values(subtasks).forEach((subtask) => {
+          subtasksArray.push({ title: subtask, isCompleted: false });
+        });
+
+        return {
+          payload: {
+            title,
+            description,
+            subtasksArray,
+            status,
+            taskId,
+            currentBoardName,
+          },
+        };
+      },
     },
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     taskEdited: {
