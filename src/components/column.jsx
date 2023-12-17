@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import TaskCard from "./TaskCard";
 import tinycolor from "tinycolor2";
+import { selectBoard } from "../features/selectors";
 
 const ColumnContainer = styled.div`
   display: flex;
@@ -31,10 +32,11 @@ export default function ({ columnData }) {
     const color = tinycolor.random();
     return color.toHexString();
   }
-  const taskColor = getRandomColor();
-  const tasks = columnData.tasks ? Object.values(columnData.tasks) : [];
+  const presentBoard = selectBoard();
+  const tasks = presentBoard.tasks ? Object.values(presentBoard.tasks) : [];
   const empty = tasks ? "" : "empty";
   const columnName = columnData.name;
+
   return (
     <ColumnContainer className={empty}>
       <Title>
@@ -52,7 +54,11 @@ export default function ({ columnData }) {
       </Title>
 
       {tasks?.map((task, index) => {
-        return <TaskCard key={index} taskData={task} columnName={columnName} />;
+        if (task.status == columnName) {
+          return (
+            <TaskCard key={index} taskData={task} columnName={columnName} />
+          );
+        }
       })}
     </ColumnContainer>
   );

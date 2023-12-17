@@ -15,6 +15,7 @@ const boardSlice = createSlice({
         state[modifiedBoardName] = {
           name: boardName,
           columns: modifiedColumns,
+          tasks: {},
         };
       },
 
@@ -109,15 +110,17 @@ const boardSlice = createSlice({
         const {
           title,
           description,
-          subtasksArray,
+          subtasksObject,
           status,
           taskId,
           currentBoardName,
         } = action.payload;
-        state[currentBoardName].columns[status].tasks[taskId] = {
+        state[currentBoardName].tasks[taskId] = {
           title,
           description,
-          subtasks: subtasksArray,
+          subtasks: subtasksObject,
+          taskId,
+          status,
         };
       },
 
@@ -126,16 +129,22 @@ const boardSlice = createSlice({
         const taskId = nanoid();
         const currentBoardName = data.currentBoard.replace(/\s+/g, "");
 
-        let subtasksArray = [];
-        Object.values(subtasks).forEach((subtask) => {
-          subtasksArray.push({ title: subtask, isCompleted: false });
+        let subtasksObject = {};
+        Object.entries(subtasks).forEach(([subtaskId, subtask]) => {
+          // const subtaskId = nanoid();
+          subtasksObject[subtaskId] = {
+            title: subtask,
+            isCompleted: false,
+            subtaskId: subtaskId,
+          };
+          // subtasksArray.push({ title: subtask, isCompleted: false });
         });
 
         return {
           payload: {
             title,
             description,
-            subtasksArray,
+            subtasksObject,
             status,
             taskId,
             currentBoardName,
@@ -144,15 +153,78 @@ const boardSlice = createSlice({
       },
     },
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     taskEdited: {
-      reducer(state, action) {},
-      prepare(data) {},
+      reducer(state, action) {
+        const {
+          title,
+          description,
+          status,
+          taskId,
+          currentBoardName,
+          subtasks,
+        } = action.payload;
+
+        let subtasksObject = {};
+        Object.entries(subtasks).forEach(([subtaskId, subtask]) => {
+          // const subtaskId = nanoid();
+
+          subtasksObject[subtaskId] = {
+            title: subtask,
+            subtaskId: subtaskId,
+          };
+
+          // for each subtask set the isCompleted to what it was before
+          subtasksObject[subtaskId]["isCompleted"] =
+            state[currentBoardName].tasks[taskId].subtasks[
+              subtaskId
+            ].isCompleted;
+          // subtasksArray.push({ title: subtask, isCompleted: false });
+        });
+
+        // now set the entire task
+        state[currentBoardName].tasks[taskId] = {
+          title,
+          description,
+          subtasks: subtasksObject,
+          taskId,
+          status,
+        };
+      },
+      prepare(data) {
+        const { title, description, status, ...subtasks } = data.data;
+        const taskId = data.taskId;
+        const currentBoardName = data.currentBoardName;
+
+        return {
+          payload: {
+            title,
+            description,
+            status,
+            taskId,
+            currentBoardName,
+            subtasks,
+          },
+        };
+      },
+    },
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    statusChanged: {
+      reducer(state, action) {
+        const { taskId, newStatus, currentBoard } = action.payload;
+        state[currentBoard].tasks[taskId].status = newStatus;
+      },
     },
   },
 });
 
 export const selectBoards = (state) => state.boards;
 
-export const { newBoardCreated, boardEdited, newTaskCreated, taskEdited } =
-  boardSlice.actions;
+export const {
+  newBoardCreated,
+  boardEdited,
+  newTaskCreated,
+  taskEdited,
+  statusChanged,
+} = boardSlice.actions;
 export default boardSlice.reducer;

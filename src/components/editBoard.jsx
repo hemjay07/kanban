@@ -63,15 +63,27 @@ const Title = styled.div`
   // border: solid 2px red;
 `;
 export default function ({ setEditBoard }) {
+  // console.log(errors[1]);
+  // the handleSubmit API from the useForm hook passes the data as arguement to the function it is called with
+
+  // Redux toolkit
+  // get the columns of the board, we need to prefill the board to be edited with the current state
+
   const col = selectColumns();
-  console.log(col, "aoghnwog");
+  const dispatch = useDispatch();
+  const currentBoard = selectSelectedBoard();
+
   // React Hook Form
+  // set the defaultValues values. Set the default values of the columns by the index, this makes sense since we later registered the columns using the index
+  // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   let defaultValues = {};
   const boardName = selectSelectedBoard();
   defaultValues[boardName] = boardName;
   col.forEach((col, index) => {
     defaultValues[index] = col.name;
   });
+
+  // Register the inputs
   const {
     register,
     handleSubmit,
@@ -80,12 +92,36 @@ export default function ({ setEditBoard }) {
     shouldUnregister: true,
     defaultValues: { ...defaultValues, boardName },
   });
-  // console.log(errors[1]);
-  // the handleSubmit API from the useForm hook passes the data as arguement to the function it is called with
 
-  // Redux toolkit
-  const dispatch = useDispatch();
-  const currentBoard = selectSelectedBoard();
+  // column logic
+  // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // The number of columns need to ne dynamically created, cliking add new column would add a new column by calling a new editableInput and registering the input to react hook form. To delete a column, the X button is located in the editableInput so I passed the deletecolumn function as a prop which will be called when the button is clicked.
+
+  // the columnIdRef is used to keep track of the columnId. When a new column added on attempt to edit the board, the id will start counting from col.length since the default columns have taken the ids up till that
+  const columnIdRef = useRef(col.length);
+
+  // Initialize the state to a number of columns equivalent to the number in the store
+  const [columns, setColumns] = useState(() => {
+    return col.map((col, index) => {
+      const uniqueID = index;
+      return {
+        id: uniqueID,
+        jsx: (
+          <div key={uniqueID} style={{ position: "relative" }}>
+            <EdittableInput
+              error={errors[`${uniqueID}}`]}
+              removecolumn={removeColumn}
+              id={uniqueID}
+              {...register(`${uniqueID}`, { required: "Can’t be empty" })}
+            />
+          </div>
+        ),
+      };
+    });
+  });
+  // -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  // Event handlers------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   function onSubmit(data) {
     console.log(data);
     console.log(errors);
@@ -97,8 +133,6 @@ export default function ({ setEditBoard }) {
     const uniqueID = columnIdRef.current;
 
     setColumns((prev) => {
-      // console.log(prev, uniqueID, "prevvvvvvv", errors[`${uniqueID}}`]);
-
       return [
         ...prev,
         {
@@ -106,9 +140,6 @@ export default function ({ setEditBoard }) {
           jsx: (
             <div key={uniqueID} style={{ position: "relative" }}>
               <EdittableInput
-                // unregister={unregister}
-                // error={errors[`${uniqueID}}`]}
-                // setnumberofcolumns={setNumberOfColumns}
                 removecolumn={removeColumn}
                 id={uniqueID}
                 {...register(`${uniqueID}`, { required: "Can’t be empty" })}
@@ -126,43 +157,8 @@ export default function ({ setEditBoard }) {
       })
     );
   }
-  // column logic
-  // The number of columns need to ne dynamically created, cliking add new column would add a new column by calling a new editableInput and registering the input to react hook form. To delete a column, the X button is located in the editableInput so I passed the deletecolumn function as a prop which will be called when the button is clicked.
-  const columnIdRef = useRef(col.length);
-  const [columns, setColumns] = useState(() => {
-    // const uniqueID = columnIdRef.current;
-    return col.map((col, index) => {
-      const uniqueID = index;
-      return {
-        id: uniqueID,
-        jsx: (
-          <div key={uniqueID} style={{ position: "relative" }}>
-            <EdittableInput
-              // unregister={unregister}
-              error={errors[`${uniqueID}}`]}
-              // setnumberofcolumns={setNumberOfColumns}
-              removecolumn={removeColumn}
-              id={uniqueID}
-              {...register(`${uniqueID}`, { required: "Can’t be empty" })}
-            />
-          </div>
-        ),
-      };
-    });
+  // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    // <div style={{ position: "relative" }}>
-    //   <EdittableInput
-    //     // unregister={unregister}
-    //     error={errors[`${uniqueID}}`]}
-    //     // setnumberofcolumns={setNumberOfColumns}
-    //     key={uniqueID}
-    //     id={uniqueID}
-    //     {...register(`${uniqueID}`, { required: "Can’t be empty" })}
-    //   />
-    // </div>,
-  });
-
-  // console.log("parent rerendered as well");
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Modal visibilitySetter={setEditBoard} />

@@ -343,3 +343,30 @@ const jargon = {
     },
   },
 };
+const secon = {
+  boards: {
+    Writing: {
+      name: "Writing",
+      columns: {
+        b: {
+          name: "b",
+        },
+      },
+      tasks: {
+        "3d8yrTievGwQxzHD0S8Mo": {
+          title: "a",
+          description: "a",
+          subtasks: [
+            {
+              title: "a",
+              isCompleted: false,
+            },
+          ],
+          taskId: "3d8yrTievGwQxzHD0S8Mo",
+          status: "b",
+        },
+      },
+    },
+  },
+  selectedBoard: "",
+};

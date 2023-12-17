@@ -3,6 +3,9 @@ import styled from "styled-components";
 import Modal from "./modal";
 import TaskDropDown from "./taskDropDown";
 import { SelectorInput } from "./inputs";
+import { useDispatch } from "react-redux";
+import { statusChanged } from "../features/boardSlice";
+import { selectSelectedBoard } from "../features/selectors";
 const ViewTaskContainer = styled.div`
   // border: solid 2px red;
   display: flex;
@@ -67,6 +70,22 @@ export default function ViewTask({
   setDeleteTask,
   taskData,
 }) {
+  // Status change logic
+  const dispatch = useDispatch();
+  const currentBoard = selectSelectedBoard();
+  function handleStatusChange(e) {
+    e.preventDefault();
+    const newStatus = e.target.value;
+
+    const taskId = taskData.taskId;
+    dispatch(statusChanged({ newStatus, taskId, currentBoard }));
+  }
+
+  const [isCompleted, setIsCompleted] = useState(false);
+  function handleCompletedChange() {
+    setIsCompleted((prev) => !prev);
+  }
+
   return (
     <div>
       <Modal visibilitySetter={setViewTask} />
@@ -87,21 +106,22 @@ export default function ViewTask({
           Substacks ({taskData.subtasks.length} of 3 )
         </SubtaskHeader>
         <Subtasks>
-          {taskData.subtasks.map((subtask) => {
+          {Object.values(taskData.subtasks).map((subtask, index) => {
             return (
-              <Subtask>
+              <Subtask key={index}>
                 <label>
                   <input
                     type="checkbox"
-                    onChange={console.log("clicked")}
-                    checked={subtask.isCompleted}
+                    onChange={handleCompletedChange}
+                    // checked={subtask.isCompleted}
+                    checked={isCompleted}
                   />
                   <p
                     style={{
                       textDecorationLine: `${
-                        subtask.isCompleted ? "line-through" : "none"
+                        isCompleted ? "line-through" : "none"
                       }`,
-                      opacity: `${subtask.isCompleted ? 0.5 : 1}`,
+                      opacity: `${isCompleted ? 0.5 : 1}`,
                     }}
                   >
                     {subtask.title}
@@ -112,7 +132,10 @@ export default function ViewTask({
           })}
         </Subtasks>
         <StatusHeader> Current Status</StatusHeader>
-        <SelectorInput selected={taskData.status} />
+        <SelectorInput
+          selected={taskData.status}
+          statusChange={handleStatusChange}
+        />
       </ViewTaskContainer>
     </div>
   );

@@ -12,17 +12,25 @@ export function selectSelectedBoard() {
   return selectedBoard;
 }
 
-export function selectColumns() {
+export function selectBoard() {
   const currentBoardName = selectSelectedBoard();
   const boards = useSelector(selectBoards);
   const currentBoard = Object.values(boards).filter(
     (board) => board.name == currentBoardName
   )[0];
 
+  return currentBoard;
+}
+export function selectColumns() {
+  const currentBoard = selectBoard();
   const columns = currentBoard ? Object.values(currentBoard.columns) : [];
 
   return columns;
 }
+
+// export function selectSubtasks() {
+//   const currentBoardName = selectSelectedBoard();
+// }
 
 export function boardsArray() {
   return Object.values(useSelector(selectBoards));

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Modal from "./modal";
+import { Form, useForm } from "react-hook-form";
 // import {subsc}
 import {
   DescriptionInput,
@@ -8,6 +9,9 @@ import {
   SelectorInput,
   TitleInput,
 } from "./inputs";
+import { useDispatch } from "react-redux";
+import { taskEdited } from "../features/boardSlice";
+import { selectSelectedBoard } from "../features/selectors";
 const EditTaskContainer = styled.div`
   position: absolute;
   left: 50%;
@@ -69,32 +73,121 @@ const Description = styled.div``;
 
 // The setEdit prop is used to display the modal, the newTask is used to indicate if this is a new task or you are trying to edit a task, the selected either "none" (for a new task which of course has no status yet) or the status (taskData.status) which is the column the task belongs in
 
-export default function ({ setEdit, selected }) {
+export default function ({ setEdit, selected, taskData }) {
+  // React Hook Form
+  // set the defaultValues values. Set the default values of the subtasks by the index, this makes sense since we later registered the subtasks using the index
+  // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  const subtasksArray = Object.values(taskData.subtasks);
+
+  let defaultValues = {
+    title: taskData.title,
+    description: taskData.description,
+    status: taskData.status,
+  };
+
+  subtasksArray.forEach((subtask, index) => {
+    defaultValues[index] = subtask.title;
+  });
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+  } = useForm({ shouldUnregister: true, defaultValues });
+
+  // subtask logic
+  // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  const subtaskIdRef = useRef(subtasksArray.length);
+  const [subtasks, setSubtasks] = useState(() => {
+    return subtasksArray.map((subtask, index) => {
+      const uniqueId = index;
+      return {
+        id: uniqueId,
+        jsx: (
+          <EdittableInput
+            key={uniqueId}
+            id={uniqueId}
+            error={errors[`${uniqueId}}`]}
+            removecolumn={removeColumn}
+            {...register(`${uniqueId}`, { required: "Can’t be empty" })}
+          />
+        ),
+      };
+    });
+  });
+
+  // Event handlers------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  const dispatch = useDispatch();
+  const currentBoardName = selectSelectedBoard();
+  function onSubmit(data) {
+    const taskId = taskData.taskId;
+
+    dispatch(taskEdited({ data, taskId, currentBoardName }));
+    console.log(data);
+  }
+  function addSubtask() {
+    setSubtasks((prev) => {
+      subtaskIdRef.current = subtaskIdRef.current + 1;
+      const uniqueId = subtaskIdRef.current;
+      return [
+        ...prev,
+        {
+          // this is a new subtask, the id is created by adding 1 to the current ref
+          id: uniqueId,
+          jsx: (
+            <EdittableInput
+              key={uniqueId}
+              error={errors[`${uniqueId}}`]}
+              id={uniqueId}
+              removecolumn={removeColumn}
+              {...register(`${uniqueId}`, { required: "Can’t be empty" })}
+            />
+          ),
+        },
+      ];
+    });
+  }
+  function removeColumn(id) {
+    setSubtasks((prev) =>
+      prev.filter((subtask) => {
+        return subtask.id != id;
+      })
+    );
+  }
+  // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Modal visibilitySetter={setEdit} />
       <EditTaskContainer>
         <h3>Edit Task</h3>
         <Title>
           <p>Title</p>
-          <TitleInput />
+          {/* this div helps to contain the title error message inside the title */}
+          <div style={{ position: "relative" }}>
+            <TitleInput
+              {...register("title", { required: "Can’t be empty" })}
+              error={errors["Title"]}
+            />
+          </div>
         </Title>
         <Description>
           <p>Description</p>
-          <DescriptionInput />
+          <DescriptionInput {...register("description")} />
         </Description>
         <Subtask>
           <p>Subtasks</p>
-          <EdittableInput />
-          <EdittableInput />
-          <button>+ Add New Subtask</button>
+          {subtasks.map((subtask) => {
+            return subtask.jsx;
+          })}
+          <button type="button" onClick={addSubtask}>
+            + Add New Subtask
+          </button>
         </Subtask>
         <Status>
           <h3></h3>
-          <SelectorInput selected={selected} />
+          <SelectorInput selected={selected} {...register("status")} />
         </Status>
-        <SaveChangesButton>Save Changes</SaveChangesButton>
+        <SaveChangesButton type="submit">Save Changes</SaveChangesButton>
       </EditTaskContainer>
-    </>
+    </form>
   );
 }

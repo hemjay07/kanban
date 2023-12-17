@@ -139,6 +139,12 @@ export const SelectorInput = forwardRef((props, ref) => {
   );
 
   const handleDropdownChange = (event) => {
+    event.preventDefault();
+
+    // if the parent component is sending a prop for status change, change the status
+    if (props.statusChange) {
+      props.statusChange(event);
+    }
     setSelectedOption(event.target.value);
   };
   return (
@@ -147,6 +153,7 @@ export const SelectorInput = forwardRef((props, ref) => {
       ref={ref}
       value={selectedOption}
       onChange={handleDropdownChange}
+      StatusChange={props.change}
     >
       {options.map((option, index) => (
         <option value={option} key={index}>
