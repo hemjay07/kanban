@@ -175,10 +175,10 @@ const boardSlice = createSlice({
           };
 
           // for each subtask set the isCompleted to what it was before
-          subtasksObject[subtaskId]["isCompleted"] =
-            state[currentBoardName].tasks[taskId].subtasks[
-              subtaskId
-            ].isCompleted;
+          // subtasksObject[subtaskId]["isCompleted"] =
+          //   state[currentBoardName].tasks[taskId].subtasks[
+          //     subtaskId
+          //   ].isCompleted;
           // subtasksArray.push({ title: subtask, isCompleted: false });
         });
 

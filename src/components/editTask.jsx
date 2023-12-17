@@ -119,15 +119,16 @@ export default function ({ setEdit, selected, taskData }) {
   const dispatch = useDispatch();
   const currentBoardName = selectSelectedBoard();
   function onSubmit(data) {
+    console.log("started submitting");
     const taskId = taskData.taskId;
 
     dispatch(taskEdited({ data, taskId, currentBoardName }));
-    console.log(data);
+    console.log(data, taskId, currentBoardName, "===============+++++++++++++");
   }
   function addSubtask() {
+    subtaskIdRef.current = subtaskIdRef.current + 1;
+    const uniqueId = subtaskIdRef.current;
     setSubtasks((prev) => {
-      subtaskIdRef.current = subtaskIdRef.current + 1;
-      const uniqueId = subtaskIdRef.current;
       return [
         ...prev,
         {
