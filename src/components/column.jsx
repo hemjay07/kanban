@@ -32,7 +32,7 @@ export default function ({ columnData }) {
     return color.toHexString();
   }
   const taskColor = getRandomColor();
-  const tasks = columnData.tasks;
+  const tasks = columnData.tasks ? Object.values(columnData.tasks) : [];
   const empty = tasks ? "" : "empty";
   const columnName = columnData.name;
   return (

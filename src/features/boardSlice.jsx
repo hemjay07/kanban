@@ -25,7 +25,7 @@ const boardSlice = createSlice({
         let modifiedColumns = {};
         // modify the column to this kind of data structure
         Object.values(columns).forEach((column) => {
-          modifiedColumns[column] = { name: column };
+          modifiedColumns[column] = { name: column, tasks: {} };
         });
 
         // convert the name of the board to a single string since that is how its object will be named (this is different from what its name is IN the object itself)
@@ -89,7 +89,7 @@ const boardSlice = createSlice({
 
         let modifiedColumns = {};
         Object.values(columns).forEach((column) => {
-          modifiedColumns[column] = { name: column };
+          modifiedColumns[column] = { name: column, tasks: {} };
         });
 
         return {
@@ -112,26 +112,12 @@ const boardSlice = createSlice({
           subtasksArray,
           status,
           taskId,
-          currentBoard,
+          currentBoardName,
         } = action.payload;
-        // {
-        //   boards: {
-        //     Writing: {
-        //       name: 'Writing',
-        //       columns: {
-        //         wewe: {
-        //           name: 'wewe'
-        //         }
-        //       }
-        //     }
-        //   },
-        //   selectedBoard: ''
-        // }
-        state.writing.columns[status].tasks = {
+        state[currentBoardName].columns[status].tasks[taskId] = {
           title,
           description,
-          taskId,
-          subtasksArray,
+          subtasks: subtasksArray,
         };
       },
 
