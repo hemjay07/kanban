@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Modal from "./modal";
 import TaskDropDown from "./taskDropDown";
 import { SelectorInput } from "./inputs";
 import { useDispatch } from "react-redux";
-import { statusChanged } from "../features/boardSlice";
-import { selectSelectedBoard } from "../features/selectors";
+import { checkButtonChanged, statusChanged } from "../features/boardSlice";
+import { selectSelectedBoard, selectSubtaskIds } from "../features/selectors";
 const ViewTaskContainer = styled.div`
   // border: solid 2px red;
   display: flex;
@@ -73,18 +73,48 @@ export default function ViewTask({
   // Status change logic
   const dispatch = useDispatch();
   const currentBoard = selectSelectedBoard();
+  const taskId = taskData.taskId;
   function handleStatusChange(e) {
     e.preventDefault();
     const newStatus = e.target.value;
 
-    const taskId = taskData.taskId;
     dispatch(statusChanged({ newStatus, taskId, currentBoard }));
   }
 
-  const [isCompleted, setIsCompleted] = useState(false);
-  function handleCompletedChange() {
-    setIsCompleted((prev) => !prev);
+  const subtasksIds = selectSubtaskIds(taskId);
+  console.log(subtasksIds);
+  const [isCompletedObject, setIsCompletedObject] = useState(() => {
+    let isCompletedObject = {};
+    Object.entries(taskData.subtasks).forEach(([subtaskId, subtaskData]) => {
+      isCompletedObject[subtaskId] = { isCompleted: subtaskData.isCompleted };
+    });
+    return isCompletedObject;
+  });
+  console.log(isCompletedObject);
+
+  function handleCompletedChange(id) {
+    setIsCompletedObject((prev) => {
+      return {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          isCompleted: !prev[id].isCompleted,
+        },
+      };
+    });
   }
+  // append the latest isChanged state to the store upon unmount of this component
+
+  useEffect(() => {
+    return () => {
+      setIsCompletedObject((prev) => {
+        const data = prev;
+        console.log(data);
+        dispatch(checkButtonChanged({ data, currentBoard, taskId }));
+        return prev;
+      });
+    };
+  });
 
   return (
     <div>
@@ -107,21 +137,23 @@ export default function ViewTask({
         </SubtaskHeader>
         <Subtasks>
           {Object.values(taskData.subtasks).map((subtask, index) => {
+            const id = subtask.subtaskId;
+            const checked = isCompletedObject[id].isCompleted;
             return (
               <Subtask key={index}>
                 <label>
                   <input
                     type="checkbox"
-                    onChange={handleCompletedChange}
+                    onChange={() => handleCompletedChange(id)}
                     // checked={subtask.isCompleted}
-                    checked={isCompleted}
+                    checked={checked}
                   />
                   <p
                     style={{
                       textDecorationLine: `${
-                        isCompleted ? "line-through" : "none"
+                        checked ? "line-through" : "none"
                       }`,
-                      opacity: `${isCompleted ? 0.5 : 1}`,
+                      opacity: `${checked ? 0.5 : 1}`,
                     }}
                   >
                     {subtask.title}

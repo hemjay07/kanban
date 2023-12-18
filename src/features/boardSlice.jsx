@@ -90,7 +90,7 @@ const boardSlice = createSlice({
 
         let modifiedColumns = {};
         Object.values(columns).forEach((column) => {
-          modifiedColumns[column] = { name: column, tasks: {} };
+          modifiedColumns[column] = { name: column };
         });
 
         return {
@@ -130,8 +130,8 @@ const boardSlice = createSlice({
         const currentBoardName = data.currentBoard.replace(/\s+/g, "");
 
         let subtasksObject = {};
-        Object.entries(subtasks).forEach(([subtaskId, subtask]) => {
-          // const subtaskId = nanoid();
+        Object.values(subtasks).forEach((subtask) => {
+          const subtaskId = nanoid();
           subtasksObject[subtaskId] = {
             title: subtask,
             isCompleted: false,
@@ -162,40 +162,48 @@ const boardSlice = createSlice({
           status,
           taskId,
           currentBoardName,
-          subtasks,
+          subtasksObject,
+          previousSubtasksObject,
         } = action.payload;
 
-        let subtasksObject = {};
-        Object.entries(subtasks).forEach(([subtaskId, subtask]) => {
-          // const subtaskId = nanoid();
+        let modifiedSubtasksObject = {};
+        Object.entries(subtasksObject).forEach(([subtaskId, subtask]) => {
+          let previousCheckedState;
+          if (previousSubtasksObject[subtaskId]) {
+            previousCheckedState =
+              previousSubtasksObject[subtaskId].isCompleted;
+          } else {
+            previousCheckedState = false;
+          }
 
-          subtasksObject[subtaskId] = {
+          modifiedSubtasksObject[subtaskId] = {
             title: subtask,
             subtaskId: subtaskId,
+            isCompleted: previousCheckedState,
           };
-
-          // for each subtask set the isCompleted to what it was before
-          // subtasksObject[subtaskId]["isCompleted"] =
-          //   state[currentBoardName].tasks[taskId].subtasks[
-          //     subtaskId
-          //   ].isCompleted;
-          // subtasksArray.push({ title: subtask, isCompleted: false });
         });
 
         // now set the entire task
         state[currentBoardName].tasks[taskId] = {
           title,
           description,
-          subtasks: subtasksObject,
+          subtasks: modifiedSubtasksObject,
           taskId,
           status,
         };
       },
       prepare(data) {
-        const { title, description, status, ...subtasks } = data.data;
+        const {
+          title,
+          description,
+          status,
+
+          ...subtasks
+        } = data.data;
         const taskId = data.taskId;
         const currentBoardName = data.currentBoardName;
-
+        const previousSubtasksObject = data.previousSubtasksObject;
+        console.log(previousSubtasksObject, "algbwobgwog;bowfgbwopfbwofw");
         return {
           payload: {
             title,
@@ -203,7 +211,8 @@ const boardSlice = createSlice({
             status,
             taskId,
             currentBoardName,
-            subtasks,
+            subtasksObject: subtasks,
+            previousSubtasksObject,
           },
         };
       },
@@ -213,6 +222,17 @@ const boardSlice = createSlice({
       reducer(state, action) {
         const { taskId, newStatus, currentBoard } = action.payload;
         state[currentBoard].tasks[taskId].status = newStatus;
+      },
+    },
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    checkButtonChanged: {
+      reducer(state, action) {
+        const { data, currentBoard, taskId } = action.payload;
+
+        Object.entries(data).forEach(([key, value]) => {
+          state[currentBoard].tasks[taskId].subtasks[key].isCompleted =
+            value.isCompleted;
+        });
       },
     },
   },
@@ -226,5 +246,6 @@ export const {
   newTaskCreated,
   taskEdited,
   statusChanged,
+  checkButtonChanged,
 } = boardSlice.actions;
 export default boardSlice.reducer;

@@ -12,6 +12,7 @@ import {
 import { useDispatch } from "react-redux";
 import { taskEdited } from "../features/boardSlice";
 import { selectSelectedBoard } from "../features/selectors";
+import { nanoid } from "nanoid";
 const EditTaskContainer = styled.div`
   position: absolute;
   left: 50%;
@@ -77,7 +78,7 @@ export default function ({ setEdit, selected, taskData }) {
   // React Hook Form
   // set the defaultValues values. Set the default values of the subtasks by the index, this makes sense since we later registered the subtasks using the index
   // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  const subtasksArray = Object.values(taskData.subtasks);
+  const subtasksArray = Object.entries(taskData.subtasks);
 
   let defaultValues = {
     title: taskData.title,
@@ -85,8 +86,8 @@ export default function ({ setEdit, selected, taskData }) {
     status: taskData.status,
   };
 
-  subtasksArray.forEach((subtask, index) => {
-    defaultValues[index] = subtask.title;
+  subtasksArray.forEach(([key, value]) => {
+    defaultValues[key] = value.title;
   });
   const {
     register,
@@ -98,8 +99,8 @@ export default function ({ setEdit, selected, taskData }) {
   // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   const subtaskIdRef = useRef(subtasksArray.length);
   const [subtasks, setSubtasks] = useState(() => {
-    return subtasksArray.map((subtask, index) => {
-      const uniqueId = index;
+    return subtasksArray.map(([key, value]) => {
+      const uniqueId = key;
       return {
         id: uniqueId,
         jsx: (
@@ -121,13 +122,20 @@ export default function ({ setEdit, selected, taskData }) {
   function onSubmit(data) {
     console.log("started submitting");
     const taskId = taskData.taskId;
-
-    dispatch(taskEdited({ data, taskId, currentBoardName }));
-    console.log(data, taskId, currentBoardName, "===============+++++++++++++");
+    const previousSubtasksObject = taskData.subtasks;
+    dispatch(
+      taskEdited({ data, taskId, currentBoardName, previousSubtasksObject })
+    );
+    console.log(
+      data,
+      taskId,
+      currentBoardName,
+      previousSubtasksObject,
+      "===============+++++++++++++"
+    );
   }
   function addSubtask() {
-    subtaskIdRef.current = subtaskIdRef.current + 1;
-    const uniqueId = subtaskIdRef.current;
+    const uniqueId = nanoid();
     setSubtasks((prev) => {
       return [
         ...prev,

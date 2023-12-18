@@ -28,6 +28,12 @@ export function selectColumns() {
   return columns;
 }
 
+export function selectSubtaskIds(taskId) {
+  const currentBoard = selectBoard();
+  const ids = Object.keys(currentBoard.tasks[taskId].subtasks);
+  return ids;
+}
+
 // export function selectSubtasks() {
 //   const currentBoardName = selectSelectedBoard();
 // }
