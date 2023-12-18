@@ -83,7 +83,6 @@ export default function ({ setAddNewTask, selected }) {
   const dispatch = useDispatch();
   const currentBoard = selectSelectedBoard();
   function onSubmit(data) {
-    console.log(data, currentBoard);
     dispatch(newTaskCreated({ data, currentBoard }));
   }
   const subtaskIdRef = useRef(1);

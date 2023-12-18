@@ -89,10 +89,6 @@ const EdittableP = styled.p`
   line-height: 1.4375rem;
 `;
 export const EdittableInput = forwardRef((props, ref) => {
-  // console.log(props);
-  // useEffect(() => {
-  //   props.unregister(key);
-  // }, []);
   return (
     <StyledEdittableInput>
       <input {...props} type="text" ref={ref} />
@@ -130,7 +126,6 @@ export const SelectorInput = forwardRef((props, ref) => {
   const availableColumns = availableBoard
     ? Object.keys(availableBoard.columns)
     : [];
-  console.log(availableColumns, "availableColumns");
   const options = availableColumns;
 
   // The default selected option is the status of the task. If there is no selected option, that is "selected" is "none" set the default selected option to the first option

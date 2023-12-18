@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Modal from "./modal";
+import { useDispatch } from "react-redux";
+import { taskDeleted } from "../features/boardSlice";
+import { selectSelectedBoard } from "../features/selectors";
 const DeleteContainer = styled.div`
   width: 21.4375rem;
   height: 17.75rem;
@@ -42,17 +45,23 @@ const DeleteContainer = styled.div`
 `;
 const Buttons = styled.div``;
 export default function ({ setDeleteTask, taskData }) {
+  const dispatch = useDispatch();
+  const currentBoard = selectSelectedBoard();
+  function handleDelete() {
+    const taskId = taskData.taskId;
+    dispatch(taskDeleted({ taskId, currentBoard }));
+  }
   return (
     <>
       <Modal visibilitySetter={setDeleteTask} />
       <DeleteContainer>
         <h3>Delete this task ?</h3>
         <p>
-          Are you sure you want to delete the ‘Build settings UI’ task and its
+          Are you sure you want to delete the {taskData.title} task and its
           subtasks? This action cannot be reversed.
         </p>
         <Buttons>
-          <button>Delete</button>
+          <button onClick={handleDelete}>Delete</button>
           <button onClick={() => setDeleteTask(false)}>Cancel</button>
         </Buttons>
       </DeleteContainer>

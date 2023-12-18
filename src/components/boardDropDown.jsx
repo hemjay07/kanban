@@ -55,7 +55,6 @@ export default function ({}) {
   function handleDelete() {
     setDeleteBoard(true);
     setShowDropDown((prev) => !prev);
-    console.log(editType, "handle dlete");
   }
   return (
     <>

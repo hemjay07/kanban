@@ -97,11 +97,8 @@ const MobileAddTaskButton = styled.button`
 export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
   const boards = useSelector((state) => state.boards);
   const seleced = useSelector((state) => state.selectedBoard);
-  console.log(boards, seleced);
   const [addNewTask, setAddNewTask] = useState(false);
   const selectedBoard = selectSelectedBoard();
-
-  // console.log("rendered navbar");
   return (
     <Container>
       <LeftHalf>
@@ -128,7 +125,6 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
           alt=""
           style={{ cursor: "pointer" }}
           onClick={() => {
-            console.log("clicked");
             return setIsMobileDropDown(true);
           }}
         />
@@ -144,8 +140,6 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
         <MobileAddTaskButton
           className="mobile-only"
           onClick={() => {
-            console.log("mobile-clicked");
-
             setAddNewTask(true);
           }}
           // if there are no boards present, disable the button
@@ -156,7 +150,6 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
 
         <AddTaskButton
           onClick={() => {
-            console.log("clicked");
             setAddNewTask(true);
           }}
           className="not-on-mobile"

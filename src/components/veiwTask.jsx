@@ -82,7 +82,6 @@ export default function ViewTask({
   }
 
   const subtasksIds = selectSubtaskIds(taskId);
-  console.log(subtasksIds);
   const [isCompletedObject, setIsCompletedObject] = useState(() => {
     let isCompletedObject = {};
     Object.entries(taskData.subtasks).forEach(([subtaskId, subtaskData]) => {
@@ -90,7 +89,6 @@ export default function ViewTask({
     });
     return isCompletedObject;
   });
-  console.log(isCompletedObject);
 
   function handleCompletedChange(id) {
     setIsCompletedObject((prev) => {
@@ -109,7 +107,6 @@ export default function ViewTask({
     return () => {
       setIsCompletedObject((prev) => {
         const data = prev;
-        console.log(data);
         dispatch(checkButtonChanged({ data, currentBoard, taskId }));
         return prev;
       });

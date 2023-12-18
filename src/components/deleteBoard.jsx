@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import Modal from "./modal";
+import { selectSelectedBoard } from "../features/selectors";
+import { useDispatch } from "react-redux";
+import { boardDeleted } from "../features/boardSlice";
 const DeleteContainer = styled.div`
   width: 21.4375rem;
   height: 17.75rem;
@@ -42,17 +45,22 @@ const DeleteContainer = styled.div`
 `;
 const Buttons = styled.div``;
 export default function ({ setDeleteBoard }) {
+  const currentBoard = selectSelectedBoard();
+  const dispatch = useDispatch();
+  function handleDelete() {
+    dispatch(boardDeleted(currentBoard));
+  }
   return (
     <>
       <Modal visibilitySetter={setDeleteBoard} />
       <DeleteContainer>
         <h3>Delete this Board ?</h3>
         <p>
-          Are you sure you want to delete the ‘Platform Launch’ board? This
-          action will remove all columns and tasks and cannot be reversed.
+          Are you sure you want to delete the{currentBoard} board? This action
+          will remove all columns and tasks and cannot be reversed.
         </p>
         <Buttons>
-          <button>Delete</button>
+          <button onClick={handleDelete}>Delete</button>
           <button onClick={() => setDeleteBoard(false)}>Cancel</button>
         </Buttons>
       </DeleteContainer>

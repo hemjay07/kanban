@@ -69,15 +69,12 @@ export default function ({ setEditBoard }) {
     handleSubmit,
     formState: { errors },
   } = useForm({ shouldUnregister: true, defaultValues: {} });
-  // console.log(errors[1]);
   // the handleSubmit API from the useForm hook passes the data as arguement to the function it is called with
 
   // Redux toolkit
   const dispatch = useDispatch();
 
   function onSubmit(data) {
-    console.log(data);
-    console.log(errors);
     dispatch(newBoardCreated(data));
   }
 
@@ -111,8 +108,6 @@ export default function ({ setEditBoard }) {
     const uniqueID = columnIdRef.current;
 
     setColumns((prev) => {
-      // console.log(prev, uniqueID, "prevvvvvvv", errors[`${uniqueID}}`]);
-
       return [
         ...prev,
         {

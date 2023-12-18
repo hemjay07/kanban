@@ -103,7 +103,14 @@ const boardSlice = createSlice({
         };
       },
     },
+    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    boardDeleted: {
+      reducer(state, action) {
+        const currentBoard = action.payload;
+        delete state[currentBoard];
+      },
+    },
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     newTaskCreated: {
       reducer(state, action) {
@@ -203,7 +210,6 @@ const boardSlice = createSlice({
         const taskId = data.taskId;
         const currentBoardName = data.currentBoardName;
         const previousSubtasksObject = data.previousSubtasksObject;
-        console.log(previousSubtasksObject, "algbwobgwog;bowfgbwopfbwofw");
         return {
           payload: {
             title,
@@ -215,6 +221,13 @@ const boardSlice = createSlice({
             previousSubtasksObject,
           },
         };
+      },
+    }, // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    taskDeleted: {
+      reducer(state, action) {
+        const { taskId, currentBoard } = action.payload;
+        delete state[currentBoard].tasks[taskId];
       },
     },
     // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -247,5 +260,7 @@ export const {
   taskEdited,
   statusChanged,
   checkButtonChanged,
+  boardDeleted,
+  taskDeleted,
 } = boardSlice.actions;
 export default boardSlice.reducer;
