@@ -64,8 +64,8 @@ const HideSidebarButton = styled.button`
 export default function ({ setIsSidebar }) {
   return (
     <Container className="not-on-mobile">
-      <DarkLogo src={darkLogo} className="not-on-mobile" alt="" />
-      <LightLogo src={lightLogo} className="not-on-mobile" alt="" />
+      <DarkLogo src={darkLogo} alt="" />
+      <LightLogo src={lightLogo} alt="" />
       <ScrollContainer>
         <AllBoards />
       </ScrollContainer>

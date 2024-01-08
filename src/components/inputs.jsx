@@ -104,13 +104,13 @@ export const EdittableInput = forwardRef((props, ref) => {
 
 //Select
 const StyledSelect = styled.select`
+  border: solid 2px red;
   margin-top: 1rem;
   width: 100%;
   background: var(---background);
   color: var(--text-color);
   padding: 1rem;
   padding-right: 2rem;
-
   font-size: 0.8125rem;
   font-weight: 500;
   line-height: 1.4375rem;
@@ -118,9 +118,6 @@ const StyledSelect = styled.select`
 `;
 
 export const SelectorInput = forwardRef((props, ref) => {
-  const boards = boardsArray();
-  const selectedBoard = selectSelectedBoard();
-
   // Get the particular board that is being worked on
   const availableBoard = selectBoard();
 
