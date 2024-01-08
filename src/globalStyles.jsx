@@ -55,7 +55,7 @@ const GlobalStyles = createGlobalStyle`
     }
     @media (max-width: 768px) {
         .not-on-mobile {
-          display: none;
+          display: none !important;
         }
     }
 
