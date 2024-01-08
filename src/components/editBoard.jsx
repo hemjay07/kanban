@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { useForm } from "react-hook-form";
 import Modal from "./modal";
 import { EdittableInput, TitleInput } from "./inputs";
-import { useDispatch, useSelector } from "react-redux";
-import { boardEdited, newBoardCreated } from "../features/boardSlice";
+import { useDispatch } from "react-redux";
+import { boardEdited } from "../features/boardSlice";
 import { selectColumns, selectSelectedBoard } from "../features/selectors";
 const EditBoardContainer = styled.div`
   position: absolute;
@@ -18,7 +18,6 @@ const EditBoardContainer = styled.div`
   background: var(--primary);
   width: 85vw;
   max-width: 30rem;
-  // height: 41.1875rem;
   max-height: 80vh;
   overflow-x: auto;
   z-index: 2;
@@ -59,11 +58,8 @@ const Columns = styled.div`
   }
 `;
 
-const Title = styled.div`
-  // border: solid 2px red;
-`;
+const Title = styled.div``;
 export default function ({ setEditBoard }) {
-  // console.log(errors[1]);
   // the handleSubmit API from the useForm hook passes the data as arguement to the function it is called with
 
   // Redux toolkit
@@ -123,9 +119,8 @@ export default function ({ setEditBoard }) {
 
   // Event handlers------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
   function onSubmit(data) {
-    console.log(data);
-    console.log(errors);
     dispatch(boardEdited({ data, currentBoard }));
+    setEditBoard(false);
   }
 
   function addNewColumn() {

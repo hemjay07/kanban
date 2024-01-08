@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import ViewTask from "./veiwTask";
 import EditTask from "./editTask";
-import DeleteBoardOrTask from "./deleteBoard";
 import DeleteTask from "./deleteTask";
 const TaskContainer = styled.div`
   // border: solid 2px red;
@@ -37,11 +36,19 @@ export default function ({ taskData }) {
   const [editTask, setEditTask] = useState(false);
   const [deleteTask, setDeleteTask] = useState(false);
 
+  const totalSubtasks = Object.values(taskData.subtasks).length;
+  const completedSubtasks = Object.values(taskData.subtasks).filter(
+    (subtask) => subtask.isCompleted === true
+  ).length;
+
   return (
     <>
       <TaskContainer onClick={() => setViewTask(true)}>
         <h3>{taskData.title}</h3>
-        <p>0 of {taskData.subtasks.length} substacks</p>
+        <p>
+          {" "}
+          {completedSubtasks}of {totalSubtasks} substacks
+        </p>
       </TaskContainer>
       {viewTask && (
         <ViewTask

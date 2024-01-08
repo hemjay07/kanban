@@ -1,22 +1,19 @@
-import React, { useContext } from "react";
+import React from "react";
 import ThemeButton from "./themeButton";
 import AllBoards from "./allBoards";
 import styled from "styled-components";
 import lightLogo from "../assets/logo-dark.svg";
 import darkLogo from "../assets/logo-light.svg";
-import { BoardButton } from "./allBoards";
 import hideSidebar from "../assets/icon-hide-sidebar.svg";
 
 const LightLogo = styled.img`
   display: ${(props) => (props.theme.theme == "dark" ? "none" : "block")};
   padding: 2rem;
-  //   height: 80px;
   margin-bottom: 4rem;
 `;
 const DarkLogo = styled.img`
   display: ${(props) => (props.theme.theme == "light" ? "none" : "block")};
   padding: 2rem;
-  //   height: 80px;
   margin-bottom: 4rem;
 `;
 const Container = styled.div`
@@ -44,8 +41,25 @@ const ScrollContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  // gap: 1rem;
-  // border: solid 2px red;
+`;
+const HideSidebarButton = styled.button`
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  gap: 0.75rem;
+  width: 95%;
+  padding: 0.5rem 0 0.5rem 1rem;
+  margin: 0.5rem auto 2rem 0;
+  border-radius: 0rem 6.25rem 6.25rem 0rem;
+  color: var(--Medium-Grey);
+  background: transparent;
+  border: none;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  &:hover {
+    color: var(--Main-Purple);
+    background: var(--main-purple-hover);
+  }
 `;
 export default function ({ setIsSidebar }) {
   return (
@@ -56,10 +70,13 @@ export default function ({ setIsSidebar }) {
         <AllBoards />
       </ScrollContainer>
       <ThemeButton />
-      <BoardButton className="hideSidebar" onClick={() => setIsSidebar(false)}>
+      <HideSidebarButton
+        className="hideSidebar"
+        onClick={() => setIsSidebar(false)}
+      >
         <img src={hideSidebar} alt="" style={{ marginRight: "1rem" }} />
         Hide Sidebar
-      </BoardButton>
+      </HideSidebarButton>
     </Container>
   );
 }

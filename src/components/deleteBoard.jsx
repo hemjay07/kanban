@@ -4,6 +4,8 @@ import Modal from "./modal";
 import { selectSelectedBoard } from "../features/selectors";
 import { useDispatch } from "react-redux";
 import { boardDeleted } from "../features/boardSlice";
+
+// Styled component for delete confirmation container
 const DeleteContainer = styled.div`
   width: 21.4375rem;
   height: 17.75rem;
@@ -43,24 +45,48 @@ const DeleteContainer = styled.div`
     }
   }
 `;
+
+// Another styled component for buttons container
 const Buttons = styled.div``;
+
+// The functional component for deleting a board
 export default function ({ setDeleteBoard }) {
+  // Fetch the currently selected board
   const currentBoard = selectSelectedBoard();
+  // Hook to access the redux dispatch function
   const dispatch = useDispatch();
+
+  // Function to handle the deletion of a board
   function handleDelete() {
+    // Dispatch an action to delete the chosen board
     dispatch(boardDeleted(currentBoard));
   }
+
   return (
     <>
+      {/* Modal component that can be shown or hidden */}
       <Modal visibilitySetter={setDeleteBoard} />
+
+      {/* Delete confirmation pop-up container */}
       <DeleteContainer>
         <h3>Delete this Board ?</h3>
         <p>
+          {/* Message asking for confirmation of board deletion */}
           Are you sure you want to delete the{currentBoard} board? This action
           will remove all columns and tasks and cannot be reversed.
         </p>
+        {/* Container for the buttons */}
         <Buttons>
-          <button onClick={handleDelete}>Delete</button>
+          {/* Delete button with attached event handler */}
+          <button
+            onClick={() => {
+              handleDelete(); // Call the handleDelete function
+              setDeleteBoard(false); // Hide the delete confirmation pop-up
+            }}
+          >
+            Delete
+          </button>
+          {/* Cancel button to close the confirmation pop-up without deleting */}
           <button onClick={() => setDeleteBoard(false)}>Cancel</button>
         </Buttons>
       </DeleteContainer>

@@ -5,7 +5,7 @@ import Modal from "./modal";
 import { EdittableInput, TitleInput } from "./inputs";
 import { useDispatch } from "react-redux";
 import { newBoardCreated } from "../features/boardSlice";
-import column from "./column";
+import { boardSelected } from "../features/selectedBoardSlice";
 const EditBoardContainer = styled.div`
   position: absolute;
   left: 50%;
@@ -46,6 +46,9 @@ const SaveChangesButton = styled.button`
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.4375rem;
+  &:hover {
+    background: var(--main-purple-hover);
+  }
 `;
 
 const Columns = styled.div`
@@ -76,6 +79,9 @@ export default function ({ setEditBoard }) {
 
   function onSubmit(data) {
     dispatch(newBoardCreated(data));
+    // set the selected board to the newly created board so that users are automatically navigated to the new board
+
+    dispatch(boardSelected(data.boardName));
   }
 
   // column logic-------------------------------------

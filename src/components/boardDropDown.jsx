@@ -40,49 +40,54 @@ export const EllipsisDropDown = styled.div`
 `;
 
 export default function ({}) {
-  // console.log(view);
-
+  // Initialize state for dropdown visibility
   const [showDropDown, setShowDropDown] = useState(false);
-  const [editBoard, setEditBoard] = useState(false);
-  const [deleteBoard, setDeleteBoard] = useState(false);
-  //   delete
 
+  // Initialize state for edit board modal visibility
+  const [editBoard, setEditBoard] = useState(false);
+
+  // Initialize state for delete board modal visibility
+  const [deleteBoard, setDeleteBoard] = useState(false);
+  // State to manage delete board action - initialized but unused in the shown code
+
+  // Handler function to set edit board modal to visible and toggle dropdown visibility
   function handleEdit() {
-    setEditBoard(true);
-    setShowDropDown((prev) => !prev);
-    // console.log(setViewTaskDisplay);
+    setEditBoard(true); // Show edit board modal
+    setShowDropDown((prev) => !prev); // Toggle dropdown visibility
+    // toggle log visibility - commented out
   }
+
+  // Handler function to set delete board modal to visible and toggle dropdown visibility
   function handleDelete() {
-    setDeleteBoard(true);
-    setShowDropDown((prev) => !prev);
+    setDeleteBoard(true); // Show delete board modal
+    setShowDropDown((prev) => !prev); // Toggle dropdown visibility
   }
+
+  // Component render method
   return (
     <>
+      {/* Trigger for showing dropdown menu */}
       <img
         src={verticalEllipsis}
         alt=""
-        onClick={() => setShowDropDown((prev) => !prev)}
+        onClick={() => setShowDropDown((prev) => !prev)} // Toggle dropdown on click
         style={{ cursor: "pointer" }}
       />
+      {/* Dropdown menu for editing and deleting boards */}
       {showDropDown && (
         <EllipsisDropDown>
           <div>
-            {" "}
-            <h3 onClick={handleEdit}>Edit Board</h3>
+            <h3 onClick={handleEdit}>Edit Board</h3>{" "}
+            {/* Option to edit the board */}
           </div>
           <div>
-            {" "}
-            <h3 onClick={handleDelete}>Delete Board</h3>
+            <h3 onClick={handleDelete}>Delete Board</h3>{" "}
+            {/* Option to delete the board */}
           </div>
         </EllipsisDropDown>
       )}
-      {/* There was a challenge here The edit modal is a child of the viewTask modal
-      and when we call the onclick callback it set the viewTask modal to false
-      so that only the editB The delete modal will show fine and calling the
-      setIsDelete function wont unmount the */}
-      {deleteBoard && <DeleteBoard setDeleteBoard={setDeleteBoard} />}
-      {editBoard && <EditBoard setEditBoard={setEditBoard} />}
+      {deleteBoard && <DeleteBoard setDeleteBoard={setDeleteBoard} />}{" "}
+      {editBoard && <EditBoard setEditBoard={setEditBoard} />}{" "}
     </>
   );
 }
-//

@@ -1,18 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import AllBoardsMobile from "./mobileDropDown";
 import showSidebar from "../assets/icon-show-sidebar.svg";
 import Column from "./column";
-import data from "../data.json";
 import { AddTaskButton } from "./navbar";
 import EditBoard from "./editBoard";
-import { SelectedBoard } from "../app/App";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  boardsArray,
-  selectColumns,
-  selectSelectedBoard,
-} from "../features/selectors";
+
+import { selectBoard, selectColumns } from "../features/selectors";
 
 const BodyContainer = styled.div`
   width: 100vw;
@@ -81,6 +74,7 @@ const AddNewColumnButton = AddTaskButton;
 export default function ({ isSidebar, setIsSidebar }) {
   // this state is for the edit board modal which is displayed when add new column is clicked
   const [editBoard, setEditBoard] = useState(false);
+  const currentBoard = selectBoard();
 
   const columns = selectColumns();
 
@@ -98,7 +92,10 @@ export default function ({ isSidebar, setIsSidebar }) {
           <>
             <EmptyBoard>
               <h3>This board is empty. Create a new column to get started.</h3>
-              <AddNewColumnButton onClick={() => setEditBoard(true)}>
+              <AddNewColumnButton
+                disabled={currentBoard ? false : true}
+                onClick={() => setEditBoard(true)}
+              >
                 + Add New Column
               </AddNewColumnButton>
             </EmptyBoard>{" "}

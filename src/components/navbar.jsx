@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import MobileDropDown from "./mobileDropDown";
 import logo from "../assets/logo-mobile.svg";
@@ -7,13 +7,13 @@ import darkLogo from "../assets/logo-light.svg";
 import chevronDown from "../assets/icon-chevron-down.svg";
 import BoardDropDown from "./boardDropDown";
 import AddNewTask from "./addNewTask";
-import { SelectedBoard } from "../app/App";
-import data from "../data.json";
-import { useSelector } from "react-redux";
-import { selectSelectedBoard } from "../features/selectors";
+import {
+  selectBoard,
+  selectColumns,
+  selectSelectedBoard,
+} from "../features/selectors";
 
 const Container = styled.div`
-  // border: solid 2px red;
   height: 10rem;
   background: var(--primary);
   display: flex;
@@ -76,6 +76,7 @@ export const AddTaskButton = styled.button`
   &[disabled] {
     opacity: 0.25;
     background: var(--Main-Purple, #635fc7) !important;
+    cursor: not-allowed;
   }
 `;
 const MobileAddTaskButton = styled.button`
@@ -93,12 +94,18 @@ const MobileAddTaskButton = styled.button`
     opacity: 0.25;
   }
 `;
+const StyledH2 = styled.h2`
+  &::first-letter {
+    text-transform: uppercase;
+  }
+`;
 
 export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
-  const boards = useSelector((state) => state.boards);
-  const seleced = useSelector((state) => state.selectedBoard);
+  // const boards = useSelector(selectBoards);
+  const columns = selectColumns();
   const [addNewTask, setAddNewTask] = useState(false);
-  const selectedBoard = selectSelectedBoard();
+  const selectedBoard = selectBoard();
+
   return (
     <Container>
       <LeftHalf>
@@ -118,7 +125,7 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
           </>
         )}
 
-        <h2 className={"board-title"}>{selectedBoard}</h2>
+        <StyledH2 className={"board-title"}>{selectedBoard?.name}</StyledH2>
         <img
           src={chevronDown}
           className="mobile-only"
@@ -143,7 +150,7 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
             setAddNewTask(true);
           }}
           // if there are no boards present, disable the button
-          disabled={data.boards.length > 0 ? false : true}
+          disabled={columns.length > 0 ? false : true}
         >
           +
         </MobileAddTaskButton>
@@ -154,7 +161,7 @@ export default function ({ isSidebar, isMobileDropDown, setIsMobileDropDown }) {
           }}
           className="not-on-mobile"
           // if there are no boards present, disable the button
-          disabled={data.boards.length > 0 ? false : true}
+          disabled={columns.length > 0 ? false : true}
         >
           + Add New Task
         </AddTaskButton>

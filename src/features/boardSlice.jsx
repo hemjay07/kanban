@@ -1,35 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-const initialState = {};
+import intitialState from "./initialState";
+
+// Define the initial state of the board
+const initialState = intitialState.boards;
+
+// Create a slice for board state management with Redux Toolkit
 const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Reducer to handle new board creation
     newBoardCreated: {
       reducer(state, action) {
         const { boardName, modifiedColumns, modifiedBoardName } =
           action.payload;
 
-        // Create the columns to that particular board
+        // Set the new board structure with its name, columns, and tasks
         state[modifiedBoardName] = {
           name: boardName,
           columns: modifiedColumns,
           tasks: {},
         };
       },
-
-      // This function is provided by createSlice and it helps prepare the payload, this allow for better debugging and lesser code in the reducer
       prepare(data) {
         const { boardName, ...columns } = data;
 
         let modifiedColumns = {};
-        // modify the column to this kind of data structure
+        // Alter columns structure to fit the desired state shape
         Object.values(columns).forEach((column) => {
           modifiedColumns[column] = { name: column, tasks: {} };
         });
 
-        // convert the name of the board to a single string since that is how its object will be named (this is different from what its name is IN the object itself)
+        // Ensure board name is a single string to be used as an object key
         const modifiedBoardName = boardName.replace(/\s+/g, "");
 
         return {
@@ -38,7 +41,7 @@ const boardSlice = createSlice({
       },
     },
 
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    // Reducer to handle board edits
     boardEdited: {
       reducer(state, action) {
         const {
@@ -47,48 +50,38 @@ const boardSlice = createSlice({
           currentBoardName,
           boardName,
         } = action.payload;
-        //  state[modifiedBoardName] =
-        // check if the new columns already exist in the state, if so you want to maintain the columns ( so you dont overwrite the task and other data in them), if the column is however new, just add it to the columns object directly
+
         const formerColumn = state[currentBoardName].columns;
         const formerColumnsKeys = Object.keys(state[currentBoardName].columns);
 
-        // newColumn is used to mutate  columns object in the state
+        // Prepare the new columns object based on current or new column data
         let newColumn = {};
 
         Object.entries(modifiedColumns).forEach(([key, value]) => {
-          // if this particular column exists in statte already, create a column using the column that is in the state
           if (formerColumnsKeys.includes(key)) {
-            newColumn[key] = formerColumn[key];
+            newColumn[key] = formerColumn[key]; // Maintain existing column data
           } else {
-            // else use the value that is in the modifiedColumns which is of course new
-            newColumn[key] = value;
+            newColumn[key] = value; // Add new column
           }
         });
 
+        // Update the columns for the given board
         state[currentBoardName].columns = newColumn;
 
-        // If the name of the board is changed, you want to change the key that is used to identify this board in the state and also the board.name
+        // Check if the board name has changed and update if necessary
         if (modifiedBoardName !== currentBoardName) {
-          // make a copy of the board into a new board that has its key as the updated name
-          state[modifiedBoardName] = state[currentBoardName];
-          state[modifiedBoardName].name = boardName;
-
-          // then delete the stale board
-          delete state[currentBoardName];
+          state[modifiedBoardName] = state[currentBoardName]; // Duplicate board with new name
+          state[modifiedBoardName].name = boardName; // Update board name
+          delete state[currentBoardName]; // Remove old board
         }
       },
-
       prepare(data) {
         const { boardName, ...columns } = data.data;
-        // currentBoard is important. This is because the user could have changed the name of the board and this is the only way to take note of that
         const currentBoardName = data.currentBoard.replace(/\s+/g, "");
-
-        // Merge the boardName in case there is a space, an object key cannot be 2 stings
         const modifiedBoardName = boardName.replace(/\s+/g, "");
 
-        // convert the data from {1: "Todo", 2: "Doing", 3 "Done"} to Todo={name:"Todo"} as this is how the column is situated in the state
-
         let modifiedColumns = {};
+        // Adjust the columns' structure to fit the state shape
         Object.values(columns).forEach((column) => {
           modifiedColumns[column] = { name: column };
         });
@@ -103,15 +96,16 @@ const boardSlice = createSlice({
         };
       },
     },
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    // Reducer to handle board deletion
     boardDeleted: {
       reducer(state, action) {
         const currentBoard = action.payload;
-        delete state[currentBoard];
+        delete state[currentBoard]; // Remove the specified board
       },
     },
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Reducer to handle new task creation
     newTaskCreated: {
       reducer(state, action) {
         const {
@@ -130,21 +124,19 @@ const boardSlice = createSlice({
           status,
         };
       },
-
       prepare(data) {
         const { title, description, status, ...subtasks } = data.data;
-        const taskId = nanoid();
+        const taskId = nanoid(); // Generate a unique ID for the new task
         const currentBoardName = data.currentBoard.replace(/\s+/g, "");
 
         let subtasksObject = {};
         Object.values(subtasks).forEach((subtask) => {
-          const subtaskId = nanoid();
+          const subtaskId = nanoid(); // Generate unique ID for subtasks
           subtasksObject[subtaskId] = {
             title: subtask,
             isCompleted: false,
             subtaskId: subtaskId,
           };
-          // subtasksArray.push({ title: subtask, isCompleted: false });
         });
 
         return {
@@ -159,8 +151,8 @@ const boardSlice = createSlice({
         };
       },
     },
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    // Reducer to handle task edits
     taskEdited: {
       reducer(state, action) {
         const {
@@ -175,13 +167,9 @@ const boardSlice = createSlice({
 
         let modifiedSubtasksObject = {};
         Object.entries(subtasksObject).forEach(([subtaskId, subtask]) => {
-          let previousCheckedState;
-          if (previousSubtasksObject[subtaskId]) {
-            previousCheckedState =
-              previousSubtasksObject[subtaskId].isCompleted;
-          } else {
-            previousCheckedState = false;
-          }
+          let previousCheckedState = previousSubtasksObject[subtaskId]
+            ? previousSubtasksObject[subtaskId].isCompleted
+            : false;
 
           modifiedSubtasksObject[subtaskId] = {
             title: subtask,
@@ -190,7 +178,7 @@ const boardSlice = createSlice({
           };
         });
 
-        // now set the entire task
+        // Update the entire task data in the state
         state[currentBoardName].tasks[taskId] = {
           title,
           description,
@@ -200,16 +188,11 @@ const boardSlice = createSlice({
         };
       },
       prepare(data) {
-        const {
-          title,
-          description,
-          status,
-
-          ...subtasks
-        } = data.data;
+        const { title, description, status, ...subtasks } = data.data;
         const taskId = data.taskId;
         const currentBoardName = data.currentBoardName;
         const previousSubtasksObject = data.previousSubtasksObject;
+
         return {
           payload: {
             title,
@@ -222,26 +205,30 @@ const boardSlice = createSlice({
           },
         };
       },
-    }, // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    },
 
+    // Reducer to handle task deletion
     taskDeleted: {
       reducer(state, action) {
         const { taskId, currentBoard } = action.payload;
-        delete state[currentBoard].tasks[taskId];
+        delete state[currentBoard].tasks[taskId]; // Remove the specified task
       },
     },
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Reducer to handle status changes of tasks
     statusChanged: {
       reducer(state, action) {
         const { taskId, newStatus, currentBoard } = action.payload;
-        state[currentBoard].tasks[taskId].status = newStatus;
+        state[currentBoard].tasks[taskId].status = newStatus; // Update task status
       },
     },
-    // ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // Reducer to handle check button state changes within tasks
     checkButtonChanged: {
       reducer(state, action) {
         const { data, currentBoard, taskId } = action.payload;
 
+        // Update the completion state of each subtask
         Object.entries(data).forEach(([key, value]) => {
           state[currentBoard].tasks[taskId].subtasks[key].isCompleted =
             value.isCompleted;
@@ -251,8 +238,10 @@ const boardSlice = createSlice({
   },
 });
 
+// Selector function to access the boards state
 export const selectBoards = (state) => state.boards;
 
+// Export the actions generated by createSlice
 export const {
   newBoardCreated,
   boardEdited,
@@ -263,4 +252,6 @@ export const {
   boardDeleted,
   taskDeleted,
 } = boardSlice.actions;
+
+// Export the reducer function for the boardSlice
 export default boardSlice.reducer;

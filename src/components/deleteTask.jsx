@@ -61,7 +61,14 @@ export default function ({ setDeleteTask, taskData }) {
           subtasks? This action cannot be reversed.
         </p>
         <Buttons>
-          <button onClick={handleDelete}>Delete</button>
+          <button
+            onClick={() => {
+              handleDelete();
+              setDeleteTask(false);
+            }}
+          >
+            Delete
+          </button>
           <button onClick={() => setDeleteTask(false)}>Cancel</button>
         </Buttons>
       </DeleteContainer>

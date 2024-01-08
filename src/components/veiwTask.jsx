@@ -101,6 +101,11 @@ export default function ViewTask({
       };
     });
   }
+  const totalSubtasks = Object.values(taskData.subtasks).length;
+  const completedSubtasks = Object.values(taskData.subtasks).filter(
+    (subtask) => subtask.isCompleted === true
+  ).length;
+
   // append the latest isChanged state to the store upon unmount of this component
 
   useEffect(() => {
@@ -130,11 +135,12 @@ export default function ViewTask({
         </TaskTitle>
         <TaskDescripiton>{taskData.description}</TaskDescripiton>
         <SubtaskHeader>
-          Substacks ({taskData.subtasks.length} of 3 )
+          Substacks ({completedSubtasks} of {totalSubtasks})
         </SubtaskHeader>
         <Subtasks>
           {Object.values(taskData.subtasks).map((subtask, index) => {
             const id = subtask.subtaskId;
+
             const checked = isCompletedObject[id].isCompleted;
             return (
               <Subtask key={index}>

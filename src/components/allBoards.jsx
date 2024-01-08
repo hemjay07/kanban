@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import boardIcon from "../assets/icon-board.svg";
 import EditBoard from "./addNewBoard";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { boardSelected } from "../features/selectedBoardSlice";
 import { boardsArray, selectSelectedBoard } from "../features/selectors";
 export const BoardButton = styled.button`
@@ -35,7 +35,6 @@ export const BoardButton = styled.button`
   &.hideSidebar,
   .create-new-board {
     margin-top: auto;
-    background: red !important;
   }
 `;
 const StyledP = styled.p`
@@ -56,6 +55,7 @@ export default function () {
   const dispatch = useDispatch();
 
   function selectBoard(name) {
+    name = name.replace(/\s+/g, "");
     dispatch(boardSelected(name));
   }
   return (

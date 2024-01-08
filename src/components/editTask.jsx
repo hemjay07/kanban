@@ -126,13 +126,7 @@ export default function ({ setEdit, selected, taskData }) {
     dispatch(
       taskEdited({ data, taskId, currentBoardName, previousSubtasksObject })
     );
-    console.log(
-      data,
-      taskId,
-      currentBoardName,
-      previousSubtasksObject,
-      "===============+++++++++++++"
-    );
+    setEdit(false);
   }
   function addSubtask() {
     const uniqueId = nanoid();

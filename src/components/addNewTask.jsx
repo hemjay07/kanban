@@ -1,8 +1,7 @@
-import React, { Suspense, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import Modal from "./modal";
 import { useForm } from "react-hook-form";
-// import {subsc}
 import {
   DescriptionInput,
   EdittableInput,
@@ -66,9 +65,7 @@ const Subtask = styled.div`
 `;
 
 const Status = styled.div``;
-const Title = styled.div`
-  // border: solid 2px red;
-`;
+const Title = styled.div``;
 const Description = styled.div``;
 
 // The setEdit prop is used to display the modal, the newTask is used to indicate if this is a new task or you are trying to edit a task, the selected either "none" (for a new task which of course has no status yet) or the status (taskData.status) which is the column the task belongs in
@@ -84,6 +81,7 @@ export default function ({ setAddNewTask, selected }) {
   const currentBoard = selectSelectedBoard();
   function onSubmit(data) {
     dispatch(newTaskCreated({ data, currentBoard }));
+    setAddNewTask(false);
   }
   const subtaskIdRef = useRef(1);
 
