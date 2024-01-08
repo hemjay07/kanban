@@ -104,7 +104,7 @@ export const EdittableInput = forwardRef((props, ref) => {
 
 //Select
 const StyledSelect = styled.select`
-  border: solid 2px red;
+  border: solid 2px var(--Medium-Grey, #828fa3);
   margin-top: 1rem;
   width: 100%;
   background: var(---background);
