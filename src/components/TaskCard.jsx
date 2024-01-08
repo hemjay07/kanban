@@ -47,7 +47,7 @@ export default function ({ taskData }) {
         <h3>{taskData.title}</h3>
         <p>
           {" "}
-          {completedSubtasks}of {totalSubtasks} substacks
+          {completedSubtasks} of {totalSubtasks} substacks
         </p>
       </TaskContainer>
       {viewTask && (
