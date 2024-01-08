@@ -120,7 +120,6 @@ export default function ({ setEdit, selected, taskData }) {
   const dispatch = useDispatch();
   const currentBoardName = selectSelectedBoard();
   function onSubmit(data) {
-    console.log("started submitting");
     const taskId = taskData.taskId;
     const previousSubtasksObject = taskData.subtasks;
     dispatch(

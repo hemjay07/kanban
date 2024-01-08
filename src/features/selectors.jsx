@@ -11,7 +11,6 @@ export function selectSelectedBoard() {
   if (selectedBoard == "") {
     selectedBoard = Object.values(boards)[0]?.name || "";
   }
-  console.log(selectedBoard, "selectedBoard");
   return selectedBoard;
 }
 
@@ -20,17 +19,13 @@ export function selectBoard() {
   const currentBoardName = selectSelectedBoard();
   const boards = useSelector(selectBoards);
   const currentBoard = boards[currentBoardName];
-  console.log(currentBoard, currentBoardName, boards, "columns");
-
   return currentBoard;
 }
 
 // Retrieves an array of column objects from the current board
 export function selectColumns() {
   const currentBoard = selectBoard();
-
   const columns = currentBoard ? Object.values(currentBoard.columns) : [];
-
   return columns;
 }
 
