@@ -5,6 +5,7 @@ import EditBoard from "./addNewBoard";
 import { useDispatch } from "react-redux";
 import { boardSelected } from "../features/selectedBoardSlice";
 import { boardsArray, selectSelectedBoard } from "../features/selectors";
+
 export const BoardButton = styled.button`
   display: flex;
   gap: 0.75rem;
@@ -55,6 +56,7 @@ export default function ({ setIsMobileDropDown }) {
   // get the board array from the store
   const boards = boardsArray();
   const selectedBoard = selectSelectedBoard();
+  //  get the total number of boards from the store
 
   // useDispatch from Redux toolkit to dispatch actions
   const dispatch = useDispatch();
@@ -65,7 +67,7 @@ export default function ({ setIsMobileDropDown }) {
   }
   return (
     <>
-      <StyledP>ALL BOARDS (8)</StyledP>
+      <StyledP>ALL BOARDS ({boards.length})</StyledP>
       {boards.map((board, index) => {
         return (
           <BoardButton
