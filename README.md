@@ -10,7 +10,7 @@ Is it through building multiple complex applications, exploring documentaries, a
 
 ### Overview
 
-Kanban is a task management app that enables users keep track of tasks in a simple yet all-encompassing way. Task are grouped into columns which represents the status of the task e.g Todo, Doing, Done. Users can have multiple boards for different topics e.g Plaform Launch, Writing.
+Kanban is a task management app that enables users keep track of tasks in a simple yet all-encompassing way. Tasks are grouped into columns that represent the status of the task e.g Todo, Doing, Done. Users can have different task boards for different topics e.g Plaform Launch, Writing.  
 
 ### Preview
 
@@ -20,7 +20,29 @@ Kanban is a task management app that enables users keep track of tasks in a simp
 
 - Solution URL: [https://github.com/hemjay07/kanban](https://github.com/hemjay07/kanban)
 - Live Site URL: [https://mujeeb-kanban.netlify.app/](https://mujeeb-kanban.netlify.app/)
+  
+### Development Setup
 
+1. Clone the repo
+
+```
+$ git clone https://github.com/hemjay07/Kanban.git kanban
+$ cd kanban
+```
+
+2. Install the dependencies:
+
+```
+$ npm install
+```
+
+3. Run the development server:
+
+```
+$ npm run dev
+```
+4. Navigate to the Home page [http://localhost:5173/](http://localhost:5173/)
+   
 ### Built with
 
 - React
