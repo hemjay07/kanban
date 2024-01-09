@@ -1,4 +1,4 @@
-## Audiophile
+## Kanban
 
 > Live link: [https://mujeeb-kanban.netlify.app/](https://mujeeb-kanban.netlify.app/)
 
