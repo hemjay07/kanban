@@ -10,7 +10,7 @@ Is it through building multiple complex applications, exploring documentaries, a
 
 ### Overview
 
-Kanban is a task management app that allows users keep track of tasks in a simple yet all-encompassing way. Task are grouped into columns which represents the status of the task e.g Todo, Doing, Done. Users can have multiple boards for different topics e.g Plaform Launch, Writing.
+Kanban is a task management app that enables users keep track of tasks in a simple yet all-encompassing way. Task are grouped into columns which represents the status of the task e.g Todo, Doing, Done. Users can have multiple boards for different topics e.g Plaform Launch, Writing.
 
 ### Preview
 
@@ -35,7 +35,7 @@ Kanban is a task management app that allows users keep track of tasks in a simpl
 
 - Learnt how to use React Hook forms.
 - Learnt how to use Redux toolkit.
-- Learnt different approach to work with modals in react.
+- Learnt different ways to implement modals in react.
 
 ### Continued development
 
@@ -46,14 +46,14 @@ Kanban is a task management app that allows users keep track of tasks in a simpl
 ### Takeaways/Lessons learnt
 
 - TypeScript will save you a lot of headaches.
-- Take your time to properly set up your the structure of your redux store in way that is easiest to mutate, it is best when most part of the store are decoupled.
+- Take your time to properly set up the structure of your redux store in a way that is easiest to mutate. It is best when most parts of the store are decoupled.
 - Redux toolkit is a darling.
 
 ### Useful resources
 
 - [Redux toolkit](https://redux-toolkit.js.org/) - No better place to learn redux toolkit than the official documentation.
-- [React hook form](https://www.youtube.com/watch?v=RkXv4AXXC_4&list=PL03g4H_exuTppOgtY-45oWvN79rvJIKzf) - Straight forward tutorial on react hook form.
+- [React hook form](https://www.youtube.com/watch?v=RkXv4AXXC_4&list=PL03g4H_exuTppOgtY-45oWvN79rvJIKzf) - Straight-forward tutorial on react hook form.
 
 ## Acknowledgments
 
-I want to thank myself, me, and Mujeeb for seeing this through to the end.
+I want to thank myself, me, and Mujeeb for seeing this through to the end. I also want to thank front-end Mentor for providing this wonder designs.
