@@ -8,7 +8,6 @@ export const EllipsisDropDown = styled.div`
   right: -5rem;
   display: flex;
   flex-direction: column;
-
   justify-content: space-between;
   padding: 1rem 0;
   background: var(--primary);
@@ -34,6 +33,10 @@ export const EllipsisDropDown = styled.div`
     font-size: 0.8125rem;
     font-weight: 500;
     line-height: 1.4375rem;
+  }
+  @media (max-width: 768px) {
+    right: 1rem;
+    border: solid 1px var(--Medium-Grey, #828fa3);
   }
 `;
 
