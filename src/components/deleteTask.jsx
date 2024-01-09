@@ -6,7 +6,6 @@ import { taskDeleted } from "../features/boardSlice";
 import { selectSelectedBoard } from "../features/selectors";
 const DeleteContainer = styled.div`
   width: 21.4375rem;
-  height: 17.75rem;
   position: absolute;
   left: 50%;
   top: 50%;

@@ -8,7 +8,6 @@ import { boardDeleted } from "../features/boardSlice";
 // Styled component for delete confirmation container
 const DeleteContainer = styled.div`
   width: 21.4375rem;
-  height: 17.75rem;
   position: absolute;
   left: 50%;
   top: 50%;
