@@ -10,7 +10,7 @@ Is it through building multiple complex applications, exploring documentaries, a
 
 ### Overview
 
-Kanban is a task management app that enables users keep track of tasks in a simple yet all-encompassing way. Task are grouped into columns which represents the status of the task e.g Todo, Doing, Done. Users can have multiple boards for different topics e.g Plaform Launch, Writing.
+Kanban is a task management app that enables users keep track of tasks in a simple yet all-encompassing way. Tasks are grouped into columns that represent the status of the task e.g Todo, Doing, Done. Users can have different task boards for different topics e.g Plaform Launch, Writing.  
 
 ### Preview
 
