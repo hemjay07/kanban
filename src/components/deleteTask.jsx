@@ -31,6 +31,7 @@ const DeleteContainer = styled.div`
   button {
     width: 100%;
     border: none;
+    color: var(--text-color);
     &:first-of-type {
       border-radius: 1.25rem;
       background: var(--Red);
@@ -42,10 +43,8 @@ const DeleteContainer = styled.div`
     }
     &:first-of-type:hover {
       background-color: var(--red-hover);
-      color: var(--White);
     }
     &:last-of-type:hover {
-      color: var(--Main-Purple);
       opacity: 0.6;
     }
   }
