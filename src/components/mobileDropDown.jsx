@@ -28,11 +28,8 @@ const ScrollContainer = styled.div`
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  // gap: 1rem;
-  // border: solid 2px red;
 `;
 export default function ({ isMobileDropDown, setIsMobileDropDown }) {
-  console.log("mobile drop down clicked");
   return (
     isMobileDropDown && (
       <React.Fragment>
@@ -40,7 +37,7 @@ export default function ({ isMobileDropDown, setIsMobileDropDown }) {
         <Modal visibilitySetter={setIsMobileDropDown} />
         <Container className={"mobile-only"}>
           <ScrollContainer>
-            <AllBoards />
+            <AllBoards setIsMobileDropDown={setIsMobileDropDown} />
           </ScrollContainer>
           <ThemeButton />
         </Container>

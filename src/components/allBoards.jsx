@@ -36,6 +36,11 @@ export const BoardButton = styled.button`
   .create-new-board {
     margin-top: auto;
   }
+  p {
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
 `;
 const StyledP = styled.p`
   margin-left: 2rem;
@@ -44,7 +49,7 @@ const StyledP = styled.p`
   font-weight: 700;
   letter-spacing: 0.15rem;
 `;
-export default function () {
+export default function ({ setIsMobileDropDown }) {
   const [editBoard, setEditBoard] = useState(false);
   // const { selectedBoard, setSelectedBoard } = useContext(SelectedBoard);
   // get the board array from the store
@@ -65,11 +70,16 @@ export default function () {
         return (
           <BoardButton
             key={index}
-            onClick={() => selectBoard(board.name)}
-            className={board.name == selectedBoard ? "clicked" : ""}
+            onClick={() => {
+              selectBoard(board.name);
+              setIsMobileDropDown ? setIsMobileDropDown(false) : null;
+            }}
+            className={
+              board.name.replace(/\s+/g, "") == selectedBoard ? "clicked" : ""
+            }
           >
             <img src={boardIcon} alt="Board Icon" />
-            {board.name}
+            <p> {board.name}</p>
           </BoardButton>
         );
       })}
