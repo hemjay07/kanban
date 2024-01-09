@@ -42,6 +42,14 @@ const DeleteContainer = styled.div`
       background: var(--Medium-Grey, #828fa3);
       margin-top: 1rem;
     }
+    &:first-of-type:hover {
+      background-color: var(--red-hover);
+      color: var(--White);
+    }
+    &:last-of-type:hover {
+      color: var(--Main-Purple);
+      opacity: 0.6;
+    }
   }
 `;
 

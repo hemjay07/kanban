@@ -53,6 +53,9 @@ const SaveChangesButton = styled.button`
   font-size: 0.8125rem;
   font-weight: 700;
   line-height: 1.4375rem;
+  &:hover {
+    opacity: 0.5;
+  }
 `;
 
 const Subtask = styled.div`
@@ -63,6 +66,9 @@ const Subtask = styled.div`
     border-radius: 1.25rem;
 
     color: var(--Main-Purple);
+    &:hover {
+      opacity: 0.5;
+    }
   }
 `;
 
